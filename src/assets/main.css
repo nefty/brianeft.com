@@ -74,6 +74,9 @@ blockquote cite {
   padding-left: 1rem;
 }
 
+strong {
+  font-weight: bold;
+}
 
 p {
   padding: 0.5rem 0;

@@ -45,8 +45,8 @@
         New Session
       </button>
     </div>
-    <p>Color Selections: {{ colorSelections }}/24</p>
-    <p>Current Score: {{ score }}</p>
+    <p>Color Selections: <strong>{{ colorSelections }}/24</strong></p>
+    <p>Current Score: <strong>{{ score }}</strong></p>
   </div>
 </template>
 
