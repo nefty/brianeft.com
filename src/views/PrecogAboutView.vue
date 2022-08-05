@@ -86,10 +86,30 @@
     </blockquote>
     <h2>Credits</h2>
     <p>
-      Photo by
+      Photos by
       <a
         href="https://unsplash.com/@stephenleo1982?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
         >Stephen Leonardi</a
+      >,
+      <a
+        href="https://unsplash.com/@terrainadvco?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
+        >Christian Schrader</a
+      >,
+      <a
+        href="https://unsplash.com/@wenhao_ryan?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
+        >Wenhao Ryan</a
+      >,
+      <a
+        href="https://unsplash.com/@sajadnori?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
+        >Sajad Nori</a
+      >,
+      <a
+        href="https://unsplash.com/@darkroomlabs?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
+        >DARKROOMLABS</a
+      >, and
+      <a
+        href="https://unsplash.com/@marekpiwnicki?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
+        >Marek Piwnicki</a
       >
       on
       <a

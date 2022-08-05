@@ -29,6 +29,7 @@ const router = createRouter({
       children: [
         {
           path: "",
+          name: "precog-trainer",
           component: () => import("../components/TrainerInterface.vue"),
         },
         {

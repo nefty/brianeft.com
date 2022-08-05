@@ -4,7 +4,7 @@
       <h2 class="title" v-if="isSessionActive">Select the Correct Square</h2>
       <h2 class="title" v-else>Session Ended</h2>
       <div class="success-image" v-if="isSuccessfulTrial">
-        <img :src="getRandomImage" />
+        <img :src="getRandomImage()" />
         <audio autoplay>
           <source src="@/assets/winner.mp3" />
         </audio>
@@ -52,6 +52,11 @@
 
 <script>
 import win1 from "@/assets/stephen-leonardi.jpg";
+import win2 from "@/assets/christian-schrader.jpg";
+import win3 from "@/assets/darkroomlabs.jpg";
+import win4 from "@/assets/marek-piwnicki.jpg";
+import win5 from "@/assets/wenhao-ryan.jpg";
+import win6 from "@/assets/sajad-nori.jpg";
 
 export default {
   data() {
@@ -71,6 +76,11 @@ export default {
   },
   created() {
     this.images.push(win1);
+    this.images.push(win2);
+    this.images.push(win3);
+    this.images.push(win4);
+    this.images.push(win5);
+    this.images.push(win6);
   },
   methods: {
     select(event) {
@@ -118,6 +128,11 @@ export default {
           return "blue";
       }
     },
+    getRandomImage() {
+      let imageIndex = Math.floor(Math.random() * this.images.length);
+      console.log(this.images[imageIndex]);
+      return this.images[imageIndex];
+    },
     reset() {
       this.isSessionActive = true;
       this.session = [];
@@ -131,11 +146,6 @@ export default {
         return trial.userSelection !== "pass";
       });
       return colorSelections.length;
-    },
-    getRandomImage() {
-      let imageIndex = Math.floor(Math.random() * this.images.length);
-      console.log(this.images[imageIndex]);
-      return this.images[imageIndex];
     },
   },
 };
