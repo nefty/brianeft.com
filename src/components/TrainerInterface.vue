@@ -4,31 +4,31 @@
       <h2 class="title" v-if="isSessionActive">Select the Correct Square</h2>
       <h2 class="title" v-else>Session Ended</h2>
       <div class="success-image" v-if="isSuccessfulTrial">
-        <img src="@/assets/stephen-leonardi.jpg" />
+        <img :src="getRandomImage" />
         <audio autoplay>
           <source src="@/assets/winner.mp3" />
         </audio>
       </div>
       <button
-        :class="{ activeGreen: isGreenCorrect }"
+        :class="{ flashGreen: isColorCorrect.green }"
         class="color-button"
         id="green"
         @click="select"
       ></button>
       <button
-        :class="{ activeYellow: isYellowCorrect }"
+        :class="{ flashYellow: isColorCorrect.yellow }"
         class="color-button"
         id="yellow"
         @click="select"
       ></button>
       <button
-        :class="{ activeRed: isRedCorrect }"
+        :class="{ flashRed: isColorCorrect.red }"
         class="color-button"
         id="red"
         @click="select"
       ></button>
       <button
-        :class="{ activeBlue: isBlueCorrect }"
+        :class="{ flashBlue: isColorCorrect.blue }"
         class="color-button"
         id="blue"
         @click="select"
@@ -51,6 +51,8 @@
 </template>
 
 <script>
+import win1 from "@/assets/stephen-leonardi.jpg";
+
 export default {
   data() {
     return {
@@ -58,13 +60,18 @@ export default {
       score: 0,
       isSuccessfulTrial: false,
       isSessionActive: true,
-      isGreenCorrect: false,
-      isYellowCorrect: false,
-      isRedCorrect: false,
-      isBlueCorrect: false,
+      isColorCorrect: {
+        green: false,
+        yellow: false,
+        red: false,
+        blue: false,
+      },
+      images: [],
     };
   },
-
+  created() {
+    this.images.push(win1);
+  },
   methods: {
     select(event) {
       if (!this.isSessionActive) {
@@ -73,6 +80,7 @@ export default {
 
       const sessionLength = 24;
       const successTimeout = 800;
+      const flashInterval = 201;
 
       let trial = {};
       trial.computerSelection = this.chooseColor();
@@ -85,13 +93,15 @@ export default {
           this.isSuccessfulTrial = false;
         }, successTimeout);
       } else {
-        this.flashCorrectColor(trial.computerSelection);
+        this.isColorCorrect[trial.computerSelection] = true;
+        setTimeout(() => {
+          this.isColorCorrect[trial.computerSelection] = false;
+        }, flashInterval);
       }
 
       this.session.push(trial);
 
       if (this.colorSelections === sessionLength) {
-        console.log(this.colorSelections);
         this.isSessionActive = false;
       }
     },
@@ -113,53 +123,6 @@ export default {
       this.session = [];
       this.score = 0;
     },
-    flashCorrectColor(correctColor) {
-      const flashInterval = 100;
-      const flashTimeout = 500;
-
-      switch (correctColor) {
-        case "green": {
-          let flashTimer = setInterval(() => {
-            this.isGreenCorrect = !this.isGreenCorrect;
-          }, flashInterval);
-          setTimeout(() => {
-            clearInterval(flashTimer);
-          }, flashTimeout);
-          break;
-        }
-        case "yellow": {
-          let flashTimer = setInterval(() => {
-            this.isYellowCorrect = !this.isYellowCorrect;
-          }, flashInterval);
-          setTimeout(() => {
-            clearInterval(flashTimer);
-          }, flashTimeout);
-          break;
-        }
-        case "red": {
-          let flashTimer = setInterval(() => {
-            this.isRedCorrect = !this.isRedCorrect;
-          }, flashInterval);
-          setTimeout(() => {
-            clearInterval(flashTimer);
-          }, flashTimeout);
-          break;
-        }
-        case "blue": {
-          let flashTimer = setInterval(() => {
-            this.isBlueCorrect = !this.isBlueCorrect;
-          }, flashInterval);
-          setTimeout(() => {
-            clearInterval(flashTimer);
-          }, flashTimeout);
-          break;
-        }
-      }
-      this.isGreenCorrect = false;
-      this.isYellowCorrect = false;
-      this.isRedCorrect = false;
-      this.isBlueCorrect = false;
-    },
   },
 
   computed: {
@@ -170,12 +133,9 @@ export default {
       return colorSelections.length;
     },
     getRandomImage() {
-      const path = "@/assets/";
-      const images = ["stephen-leonardi.jpg"];
-
-      let imageIndex = Math.floor(Math.random() * images.length);
-      console.log(path + images[imageIndex]);
-      return path + images[imageIndex];
+      let imageIndex = Math.floor(Math.random() * this.images.length);
+      console.log(this.images[imageIndex]);
+      return this.images[imageIndex];
     },
   },
 };
@@ -184,10 +144,11 @@ export default {
 <style scoped>
 .title {
   grid-column: 1 / 3;
+  padding-top: 0.5rem;
 }
 
 #button-grid {
-  margin: 12px auto;
+  margin: 12px auto 0 auto;
   display: grid;
   grid-template-columns: 50% 50%;
   max-width: 480px;
@@ -196,6 +157,13 @@ export default {
 
 .interface {
   text-align: center;
+  background-color: var(--color-background-mute);
+  border-radius: 12px;
+  padding-bottom: 0.5rem;
+}
+
+.interface p {
+  padding: 0;
 }
 
 .color-button {
@@ -217,14 +185,62 @@ button:active {
   margin: 12px;
   padding: 6px;
   border-radius: 12px;
-  color: var(--vt-c-white-mute);
-  background-color: var(--vt-c-indigo);
+  color: var(--color-background-mute);
+  background-color: var(--color-text);
   font-size: 2em;
   grid-column: 1 / 3;
 }
 
 #pass:active {
   background-color: var(--vt-c-indigo-light);
+}
+
+@keyframes blinking-green {
+  0% {
+    background-color: var(--vt-c-green-light);
+  }
+  50% {
+    background-color: var(--vt-c-green);
+  }
+  100% {
+    background-color: var(--vt-c-green-light);
+  }
+}
+
+@keyframes blinking-yellow {
+  0% {
+    background-color: var(--vt-c-yellow-light);
+  }
+  50% {
+    background-color: var(--vt-c-yellow);
+  }
+  100% {
+    background-color: var(--vt-c-yellow-light);
+  }
+}
+
+@keyframes blinking-red {
+  0% {
+    background-color: var(--vt-c-red-light);
+  }
+  50% {
+    background-color: var(--vt-c-red);
+  }
+  100% {
+    background-color: var(--vt-c-red-light);
+  }
+}
+
+@keyframes blinking-blue {
+  0% {
+    background-color: var(--vt-c-blue-light);
+  }
+  50% {
+    background-color: var(--vt-c-blue);
+  }
+  100% {
+    background-color: var(--vt-c-blue-light);
+  }
 }
 
 #green {
@@ -235,8 +251,10 @@ button:active {
   background-color: var(--vt-c-green-light);
 }
 
-.activeGreen {
-  background-color: var(--vt-c-green-light) !important;
+.flashGreen {
+  animation: blinking-green 200ms;
+  animation-timing-function: linear;
+  animation-fill-mode: backwards;
 }
 
 #yellow {
@@ -247,8 +265,10 @@ button:active {
   background-color: var(--vt-c-yellow-light);
 }
 
-.activeYellow {
-  background-color: var(--vt-c-yellow-light) !important;
+.flashYellow {
+  animation: blinking-yellow 200ms;
+  animation-timing-function: linear;
+  animation-fill-mode: backwards;
 }
 
 #red {
@@ -259,8 +279,10 @@ button:active {
   background-color: var(--vt-c-red-light);
 }
 
-.activeRed {
-  background-color: var(--vt-c-red-light) !important;
+.flashRed {
+  animation: blinking-red 200ms;
+  animation-timing-function: linear;
+  animation-fill-mode: backwards;
 }
 
 #blue {
@@ -271,8 +293,10 @@ button:active {
   background-color: var(--vt-c-blue-light);
 }
 
-.activeBlue {
-  background-color: var(--vt-c-blue-light) !important;
+.flashBlue {
+  animation: blinking-blue 200ms;
+  animation-timing-function: linear;
+  animation-fill-mode: backwards;
 }
 
 .success-image {
